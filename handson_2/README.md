@@ -1,6 +1,4 @@
-Here's your entire edited content as a single code block, ready to copy and paste for GitHub:
 
-```markdown
 # Docker Hands-on 2: Ubuntu Container
 
 ## Pull and Run an Ubuntu 22.04 Container
