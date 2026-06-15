@@ -1,48 +1,107 @@
+Here's your entire edited content as a single code block, ready to copy and paste for GitHub:
+
+```markdown
 # Docker Hands-on 2: Ubuntu Container
 
-Pulled and started an Ubuntu 22.04 container:
+## Pull and Run an Ubuntu 22.04 Container
+
+Start an interactive Ubuntu 22.04 container that is automatically removed after exit:
 
 ```bash
 docker run --interactive --tty --rm ubuntu:22.04
 ```
+
 Shorthand equivalent:
+
 ```bash
 docker run -it --rm ubuntu:22.04 bash
 ```
-* `-i` (`--interactive`) keeps standard input open.
-* `-t` (`--tty`) allocates a terminal session.
-* `--rm` automatically removes the container when it exits.
-Updated package lists:
+
+- `-i` (or `--interactive`) keeps standard input open  
+- `-t` (or `--tty`) allocates a terminal session  
+- `--rm` automatically removes the container when it exits
+
+## Inside the Container
+
+Update package lists:
+
 ```bash
 apt update
 ```
-Installed the ping utility:
+
+Install the `ping` utility:
+
 ```bash
 apt install iputils-ping --yes
 ```
-Verified internet connectivity:
+
+Test internet connectivity:
+
 ```bash
 ping google.com -c 1
 ```
-**Note:** Since the container was started with `--rm`, all changes made inside it are deleted when the container exits.
 
-_____________________________________________________________________________________________
+> **Note:** Since the container was started with `--rm`, all changes made inside it are deleted when the container exits.
+
+---
+
+## Persist Changes Without `--rm`
 
 To keep installed packages and other changes, start a container **without** the `--rm` flag:
 
 ```bash
 docker run -it --name my-ubuntu-container ubuntu:22.04 bash
 ```
+
 After exiting, the container can be started again:
+
 ```bash
 docker start my-ubuntu-container
 ```
+
 To open a shell inside the running container:
+
 ```bash
 docker exec -it my-ubuntu-container bash
 ```
-_____________________________________________________________________________________________
-# Creating docker file
-* The Why?
-This allows you to continue using the same container with all previously installed packages intact.
-A container stores changes made during its lifetime, such as installed packages. By creating a container without the `--rm` flag, those changes persist when the container is stopped and started again. However, the changes exist only in that specific container. To make the setup reusable, a Dockerfile can be used to build a custom image with the required dependencies pre-installed. Any container created from that image will automatically have the same environment.
+
+---
+
+## Creating a Dockerfile
+
+### Why Create an Image?
+
+Creating an image allows you to reuse the same environment setup across multiple containers. While containers started without `--rm` preserve changes, those changes are tied to a specific container. A Dockerfile automates the setup so any container created from the resulting image has all dependencies pre-installed.
+
+### Step 1: Create a Dockerfile
+
+Create a file named `Dockerfile` (no extension) with the following content:
+
+```dockerfile
+FROM ubuntu:22.04
+
+RUN apt update && apt install -y iputils-ping
+```
+
+### Step 2: Build the Image
+
+Run the following command in the same directory as the `Dockerfile`:
+
+```bash
+docker build -t my-ubuntu-image .
+```
+
+- `-t` assigns a name/tag to the image  
+- `.` refers to the current directory (where the Dockerfile is located)
+
+### Step 3: Run a Container from the Image
+
+```bash
+docker run -it --rm my-ubuntu-image
+```
+
+## Key Idea
+
+A Dockerfile allows you to **automate environment setup** so every container created from the image already has the required dependencies installed — no manual installation needed.
+```
+
