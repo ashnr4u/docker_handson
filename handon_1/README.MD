@@ -12,3 +12,4 @@ A simple Flask app containerized using Docker.
 ```bash
 docker build -t flask-app .
 docker run -p 3000:3000 flask-app
+```
