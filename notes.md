@@ -5,6 +5,7 @@
 |---------|-------------|---------|
 | `docker pull <image>` | Download an image from registry | `docker pull nginx` |
 | `docker build -t <name> .` | Build image from Dockerfile | `docker build -t myapp .` |
+| `docker build -f <dockerfile-name> -t <image-name> <build-context>` | build a specific Dockerfile | docker build -f Dockerfile.0 -t myapp .|
 | `docker images` | List all local images | `docker images` |
 | `docker rmi <image>` | Remove an image | `docker rmi myapp:latest` |
 | `docker tag <image> <new_tag>` | Tag an image | `docker tag myapp:latest myapp:v1` |
